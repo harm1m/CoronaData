@@ -53,9 +53,12 @@ predictor = np.poly1d(model)
 modelXvalues = np.array(data.index)
 modelYvalues = predictor(modelXvalues)
 
+modelderivative = predictor.deriv()
 with modelmaker:
     st.write("The equation for the model produced:")
     st.write(np.poly1d(model))
+    st.write("The slope at the end of the period")
+    st.write(modelderivative(end))
 
 
 #chart
@@ -75,4 +78,4 @@ with modelmaker:
     if st.checkbox("show model"):
         fig.add_trace(go.Line(x = data.date, y = modelYvalues))
 
-st.plotly_chart(fig, use_container_width=False)
+st.plotly_chart(fig, use_container_width=True)
