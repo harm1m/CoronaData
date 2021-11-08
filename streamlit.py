@@ -57,8 +57,9 @@ modelderivative = predictor.deriv()
 with modelmaker:
     st.write("The equation for the model produced:")
     st.write(np.poly1d(model))
-    st.write("The slope at the end of the period")
-    st.write(modelderivative(end))
+    if model.size == 3:
+        st.write("The slope at the end of the exponential period")
+        st.write(modelderivative(end))
 
 
 #chart
