@@ -1,10 +1,11 @@
+from numpy.lib.type_check import asfarray
 import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import plotly.express as px
+import requests
 
 st.set_page_config(layout="wide")
 
@@ -54,13 +55,28 @@ modelXvalues = np.array(data.index)
 modelYvalues = predictor(modelXvalues)
 
 modelderivative = predictor.deriv()
+growthfactor = (Yaxis[end]/Yaxis[start])**(1/(end-start))
 with modelmaker:
     st.write("The equation for the model produced:")
     st.write(np.poly1d(model))
-    if model.size == 3:
-        st.write("The slope at the end of the exponential period")
-        st.write(modelderivative(end))
+    st.write("Growth factor")
+    # growth factor = endvalue/startvalue^(1/time)
+    
+    st.write(growthfactor)
 
+if 'phaseholder' not in st.session_state:
+        st.session_state['phaseholder'] = pd.DataFrame(columns = ['phase', 'start', 'end', 'growthfactor', 'growthfactor_difference'])
+
+if 'phasecounter' not in st.session_state:
+        st.session_state['phasecounter'] = 0
+
+phasecalculator = st.expander(label = 'Phase calculator')
+with phasecalculator:
+    if st.button(label = 'Add current phase'):
+        st.session_state['phasecounter'] = st.session_state['phasecounter'] + 1
+        st.session_state['phaseholder'].loc[len(st.session_state['phaseholder'].index)] = [st.session_state['phasecounter'], start, end, growthfactor, 0]
+        st.session_state['phaseholder']['growthfactor_difference'] = st.session_state['phaseholder']['growthfactor'].diff()
+    st.write(st.session_state['phaseholder'])
 
 #chart
 x = data.date
