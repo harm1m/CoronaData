@@ -19,7 +19,6 @@ if st.sidebar.button(label = 'getdata'):
 
 # logic
 data = st.session_state['data']
-st.write(data)
 
 data['date'] = pd.to_datetime(data['date'], errors='coerce')
 
