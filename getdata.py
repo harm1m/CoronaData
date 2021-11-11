@@ -64,3 +64,5 @@ data_all['Deceased_daily'] = data_all['Deceased'].diff()
 data_all['Hospital_admission_daily'] = data_all['Hospital_admission'].diff()
 data_all['date'] = pd.to_datetime(data_all['date'])
 data_all['date'] = data_all['date'].dt.strftime('%d-%m-%Y')
+
+data_all = data_all.dropna(subset = ["Total_reported"]) 
