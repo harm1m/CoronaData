@@ -96,6 +96,7 @@ with phasecalculator:
     muliplier_low = 0.85
     muliplier_high = 1.15
 
+    #API uploader
     st.write("select 5 consecutive phases before uploading to API")
     if st.button(label = 'Upload phases to API'):
 
