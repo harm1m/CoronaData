@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "numpy": "^0.0.1",
+    "plotly": "^1.0.6",
+    "requests": "^0.3.0"
+  }
+}
