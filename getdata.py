@@ -2,20 +2,21 @@
 import pandas as pd
 #math wordt gebruikt om nan values (lege values) te vinden in 't dataframe
 import math
-#voor api interactie
+#voor API interactie
 import requests
 
+#Ophalen databronnen
 url1 = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/country_data/Netherlands.csv'
 data_vaccinatie_original = pd.read_csv(url1, sep = ',', error_bad_lines=False)
 
 url2 = "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.json"
 data_aantallen_original = pd.read_json(url2)
 
+#databron hieronder is gemaakt door Job Bude
 url3 = "Maatregelen.csv"
 maatregelen_original = pd.read_csv(url3)
 
 # stap 2: mergen data bronnen
-
 maatregelen = maatregelen_original.copy()
 data_aantallen = data_aantallen_original.copy()
 data_vaccinatie = data_vaccinatie_original.copy()
@@ -58,11 +59,14 @@ data_all = data_all.reset_index(drop=True)
 data_all.loc[0:50, 'people_fully_vaccinated'] = data_all.loc[0:50, 'people_fully_vaccinated'].fillna(0.0)
 data_all.loc[0:50, 'people_vaccinated'] = data_all.loc[0:50, 'people_vaccinated'].fillna(0.0)
 
-#Add daily columns instead of total
+#Add daily increase columns
 data_all['Total_reported_daily'] = data_all['Total_reported'].diff()
 data_all['Deceased_daily'] = data_all['Deceased'].diff()
 data_all['Hospital_admission_daily'] = data_all['Hospital_admission'].diff()
+
+#zet correcte datetime voor 'date' column
 data_all['date'] = pd.to_datetime(data_all['date'])
 data_all['date'] = data_all['date'].dt.strftime('%d-%m-%Y')
 
+#gooi rijen weg met 'na' 
 data_all = data_all.dropna(subset = ["Total_reported"]) 

@@ -1,3 +1,5 @@
+# Imports
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,17 +9,17 @@ import plotly.express as px
 import requests as rq
 import json
 
+# SEt layout to fit the whole screen
 st.set_page_config(layout="wide")
 
-# data = pd.read_csv('all_data.csv')
-
+#This button accesses the data formed in getdata.py
 if st.sidebar.button(label = 'getdata'):
 
     import getdata
     st.session_state['data'] = getdata.data_all
-    
 
 # logic
+    # save data in session variable
 data = st.session_state['data']
 
 data['date'] = pd.to_datetime(data['date'], errors='coerce')
@@ -72,8 +74,6 @@ with modelmaker:
     st.write("The equation for the model produced:")
     st.write(np.poly1d(model))
     st.write("Growth factor")
-    # growth factor = endvalue/startvalue^(1/time)
-    
     st.write(growthfactor)
 
 if 'phaseholder' not in st.session_state:
@@ -82,6 +82,7 @@ if 'phaseholder' not in st.session_state:
 if 'phasecounter' not in st.session_state:
         st.session_state['phasecounter'] = 0
 
+#Creates phases table
 phasecalculator = st.expander(label = 'Phase calculator')
 with phasecalculator:
     if st.button(label = 'Add current phase'):
@@ -96,7 +97,7 @@ with phasecalculator:
     muliplier_low = 0.85
     muliplier_high = 1.15
 
-    #API uploader
+    #API uploader, selects values from table to upload to API
     st.write("select 5 consecutive phases before uploading to API")
     if st.button(label = 'Upload phases to API'):
 
